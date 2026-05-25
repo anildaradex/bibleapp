@@ -11,6 +11,7 @@
 		0DEBC35FFB160DA9D769D08D /* bibles in Resources */ = {isa = PBXBuildFile; fileRef = B4843D10843D48E04352C1C7 /* bibles */; };
 		1AA93E5CB8E06B05052A96C2 /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D907B581E37A968694FFBF0 /* Journey.swift */; };
 		246489247A3CF6E61F60B52E /* BollsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C000C8836D09F5AEDEE59F /* BollsProvider.swift */; };
+		26362CF114471E7A50FA5302 /* VoiceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D9DCF943E212F544B44FD /* VoiceService.swift */; };
 		68D228AF6632C6607A0C2D84 /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85D20A5D4081CF6BE23C163 /* JourneyView.swift */; };
 		6E2C2D19FDD760B974C74FB9 /* BibleAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9ED095C72460CCABC39010 /* BibleAppApp.swift */; };
 		76DA3AB7617F2F41C00C3033 /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46C159B15E0530074D8D58A /* TrackerService.swift */; };
@@ -20,6 +21,7 @@
 		90723BC3BEA51D32AE08BC92 /* Bible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64DC2FDCED7E60B0C1C8F3B6 /* Bible.swift */; };
 		A58AB7E323E42786FA7ECE99 /* BundledJSONProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88513E530E550CF5C56C3B4 /* BundledJSONProvider.swift */; };
 		A99311E2420DF6EF5F1E32E8 /* GemmaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3437D18CC52AE52BF07F93 /* GemmaService.swift */; };
+		B1E2817CF0D6C57746440EF7 /* SpeakersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F36C7B4A96D57D0EE36306 /* SpeakersView.swift */; };
 		BC9063E0726682CDC84D8D0B /* InsightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD236623AD3B28D80A71CC9 /* InsightSheet.swift */; };
 		C031238D0952EE3D6057AA7E /* BibleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B8333D784C01A872A3281B /* BibleService.swift */; };
 		EF59EE460A2B9CA19FC74782 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5C8431F99281DA1E0AB30 /* SearchView.swift */; };
@@ -42,8 +44,10 @@
 		B4843D10843D48E04352C1C7 /* bibles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bibles; path = BibleApp/Resources/bibles; sourceTree = SOURCE_ROOT; };
 		BA9FA1214C39D39C81A72E54 /* BibleApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BibleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C196FD5629235A5571A2BABE /* BibleBooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleBooks.swift; sourceTree = "<group>"; };
+		C1F36C7B4A96D57D0EE36306 /* SpeakersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakersView.swift; sourceTree = "<group>"; };
 		C88513E530E550CF5C56C3B4 /* BundledJSONProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledJSONProvider.swift; sourceTree = "<group>"; };
 		E46C159B15E0530074D8D58A /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
+		F08D9DCF943E212F544B44FD /* VoiceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceService.swift; sourceTree = "<group>"; };
 		F6C000C8836D09F5AEDEE59F /* BollsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BollsProvider.swift; sourceTree = "<group>"; };
 		FAEF75768353589F785CE2CF /* TranslationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +77,7 @@
 				6D3437D18CC52AE52BF07F93 /* GemmaService.swift */,
 				E46C159B15E0530074D8D58A /* TrackerService.swift */,
 				FAEF75768353589F785CE2CF /* TranslationProvider.swift */,
+				F08D9DCF943E212F544B44FD /* VoiceService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -91,6 +96,7 @@
 				BB398F4CCB1B0182F310AF3E /* AISummary */,
 				5FB11383B38006173856454D /* Reader */,
 				8F32F7EC4F8E6555348EDFC3 /* Search */,
+				EDB600CC31F0C0D463F2C470 /* Speakers */,
 				3D65BA796DA4A6AA46C840E5 /* Tracker */,
 			);
 			path = Features;
@@ -144,6 +150,14 @@
 				0D907B581E37A968694FFBF0 /* Journey.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		EDB600CC31F0C0D463F2C470 /* Speakers */ = {
+			isa = PBXGroup;
+			children = (
+				C1F36C7B4A96D57D0EE36306 /* SpeakersView.swift */,
+			);
+			path = Speakers;
 			sourceTree = "<group>";
 		};
 		F6D9CA6048D908CCC188B37C = {
@@ -239,8 +253,10 @@
 				68D228AF6632C6607A0C2D84 /* JourneyView.swift in Sources */,
 				7908A076A1D1E897DD10484A /* ReaderView.swift in Sources */,
 				EF59EE460A2B9CA19FC74782 /* SearchView.swift in Sources */,
+				B1E2817CF0D6C57746440EF7 /* SpeakersView.swift in Sources */,
 				76DA3AB7617F2F41C00C3033 /* TrackerService.swift in Sources */,
 				0BE216FD5FC5D221069928E2 /* TranslationProvider.swift in Sources */,
+				26362CF114471E7A50FA5302 /* VoiceService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

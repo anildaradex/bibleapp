@@ -19,6 +19,7 @@ struct ReaderView: View {
     @State private var showingInsight = false
     @State private var showingPicker = false
     @State private var loadError: String?
+    @ObservedObject private var voice = VoiceService.shared
 
     private var currentBook: Book { BibleBooks.book(id: bookID) ?? BibleBooks.all[43] }
 
@@ -37,6 +38,10 @@ struct ReaderView: View {
                                 .font(.callout)
                                 .foregroundStyle(.red)
                                 .padding()
+                        }
+                        if !verses.isEmpty {
+                            listenChapterBar
+                                .padding(.bottom, 8)
                         }
                         ForEach(verses) { verse in
                             HStack(alignment: .top, spacing: 8) {
@@ -122,6 +127,7 @@ struct ReaderView: View {
                                                               chapter: chapter)
             }
             .onDisappear {
+                voice.stop()
                 if let session {
                     TrackerService.shared.endSession(session,
                                                      versesRead: verses.count,
@@ -129,6 +135,45 @@ struct ReaderView: View {
                                                      goalMinutes: goalMinutes)
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var listenChapterBar: some View {
+        HStack(spacing: 12) {
+            switch voice.status {
+            case .idle:
+                Button {
+                    let text = ([currentBook.name + " \(chapter)."]
+                                + verses.map { "Verse \($0.verse). \($0.text)" })
+                                .joined(separator: " ")
+                    voice.speak(text,
+                                languageCode: VoiceService.languageCode(for: translation))
+                } label: {
+                    Label("Listen to chapter", systemImage: "play.circle.fill")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+            case .speaking:
+                Button { voice.pause() } label: {
+                    Label("Pause", systemImage: "pause.circle.fill")
+                        .font(.headline)
+                }
+                .buttonStyle(.bordered)
+                Button { voice.stop() } label: {
+                    Image(systemName: "stop.circle.fill").font(.title2)
+                }
+            case .paused:
+                Button { voice.resume() } label: {
+                    Label("Resume", systemImage: "play.circle.fill")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+                Button { voice.stop() } label: {
+                    Image(systemName: "stop.circle.fill").font(.title2)
+                }
+            }
+            Spacer()
         }
     }
 

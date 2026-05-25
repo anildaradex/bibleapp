@@ -12,6 +12,9 @@ struct ContentView: View {
             SearchView()
                 .tabItem { Label("Search", systemImage: "magnifyingglass") }
 
+            SpeakersView()
+                .tabItem { Label("Speakers", systemImage: "play.rectangle.fill") }
+
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }

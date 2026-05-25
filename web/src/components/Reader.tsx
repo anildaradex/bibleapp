@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BOOKS, BOOKS_BY_ID, indexOf } from "@/lib/books";
 import { recordSession } from "@/lib/tracker";
+import { langForTranslation } from "@/lib/speech";
+import { SpeakButton } from "@/components/SpeakButton";
 import type { PassageInsight, PassageReference, Translation, Verse } from "@/lib/types";
 
 type FontSize = "normal" | "large";
@@ -124,6 +126,16 @@ export function Reader({
 
   const verseTextClass = fontSize === "large" ? "text-2xl" : "text-lg";
   const verseLineClass = fontSize === "large" ? "leading-loose" : "leading-relaxed";
+  const lang = langForTranslation(translationID);
+
+  // Build the spoken text: "Chapter N. Verse 1. ... Verse 2. ..." so the
+  // listener hears verse boundaries even without seeing them.
+  function chapterAsSpeech(): string {
+    return [
+      `${book?.name ?? bookID} ${chapter}.`,
+      ...verses.map(v => `Verse ${v.verse}. ${v.text}`),
+    ].join(" ");
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
@@ -132,6 +144,12 @@ export function Reader({
         translations={translations}
         fontSize={fontSize} onChangeFont={changeFont}
       />
+
+      {!unavailable && !errorMessage && verses.length > 0 && (
+        <div className="mb-4">
+          <SpeakButton getText={chapterAsSpeech} lang={lang} label="Listen to chapter" />
+        </div>
+      )}
 
       {unavailable ? (
         <UnavailableCard name={unavailable.name} reason={unavailable.reason} />
@@ -180,6 +198,7 @@ export function Reader({
           error={insightError}
           insight={insight}
           referenceDisplay={referenceDisplay(bookID, chapter, selected)}
+          insightLang="en-US"
           onClose={() => setInsightOpen(false)} />
       )}
     </div>
@@ -265,13 +284,19 @@ function UnavailableCard({ name, reason }: { name: string; reason: string }) {
 }
 
 function InsightDrawer({
-  loading, error, insight, referenceDisplay, onClose,
+  loading, error, insight, referenceDisplay, insightLang, onClose,
 }: {
   loading: boolean; error: string | null;
   insight: PassageInsight | null;
   referenceDisplay: string;
+  insightLang: string;
   onClose: () => void;
 }) {
+  // Reading "the notes": summary + context, no citations/cross-refs noise.
+  const notesText = insight
+    ? `${referenceDisplay}. Summary. ${insight.summary} Context. ${insight.context}`
+    : "";
+
   return (
     <div className="fixed inset-0 z-20 flex items-end md:items-center justify-center bg-black/40">
       <div className="bg-[var(--background)] w-full md:max-w-xl md:rounded-2xl rounded-t-2xl shadow-2xl max-h-[85vh] overflow-auto">
@@ -284,6 +309,7 @@ function InsightDrawer({
           {error && <p className="text-red-600">{error}</p>}
           {insight && (
             <>
+              <SpeakButton getText={() => notesText} lang={insightLang} label="Listen to notes" />
               <Section label="Summary">{insight.summary}</Section>
               <Section label="Context">{insight.context}</Section>
               {insight.crossReferences.length > 0 && (

@@ -8,6 +8,7 @@ struct InsightSheet: View {
     @State private var insight: PassageInsight?
     @State private var loading = true
     @State private var error: String?
+    @ObservedObject private var voice = VoiceService.shared
 
     var body: some View {
         NavigationStack {
@@ -21,6 +22,7 @@ struct InsightSheet: View {
                         Text(error).foregroundStyle(.red)
                     } else if let insight {
                         Group {
+                            listenNotesBar(for: insight)
                             sectionHeader("Summary")
                             Text(insight.summary)
 
@@ -59,7 +61,42 @@ struct InsightSheet: View {
                 }
             }
             .task { await load() }
+            .onDisappear { voice.stop() }
         }
+    }
+
+    @ViewBuilder
+    private func listenNotesBar(for insight: PassageInsight) -> some View {
+        let text = "\(reference.display). Summary. \(insight.summary) Context. \(insight.context)"
+        HStack {
+            switch voice.status {
+            case .idle:
+                Button {
+                    voice.speak(text, languageCode: "en-US")
+                } label: {
+                    Label("Listen to notes", systemImage: "play.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+            case .speaking:
+                Button { voice.pause() } label: {
+                    Label("Pause", systemImage: "pause.circle.fill")
+                }
+                .buttonStyle(.bordered)
+                Button { voice.stop() } label: {
+                    Image(systemName: "stop.circle.fill")
+                }
+            case .paused:
+                Button { voice.resume() } label: {
+                    Label("Resume", systemImage: "play.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+                Button { voice.stop() } label: {
+                    Image(systemName: "stop.circle.fill")
+                }
+            }
+            Spacer()
+        }
+        .padding(.bottom, 4)
     }
 
     private func sectionHeader(_ text: String) -> some View {

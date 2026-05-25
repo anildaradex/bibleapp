@@ -68,6 +68,20 @@ To enable ESV: `cp .env.example .env.local`, paste your key from [api.esv.org/ac
 - Tap any verse to select; ✦ Insight opens the AI passage drawer.
 - Font size: **Normal / Large** toggle in the reader (Aa / Aa) — persisted per device.
 - Translation picker shows all 7 translations; "(setup)" suffix marks ones that need a key.
+- **Listen** — Web Speech API (web) and `AVSpeechSynthesizer` (iOS) read the
+  chapter and AI notes aloud. Language follows the translation: KJV / BBE /
+  ESV / NIV / NKJV → English; TAM → Tamil (Vani on macOS / iOS); TEL → Telugu
+  (Geeta on macOS / iOS). Defaults to a senior-friendly slower rate; pause /
+  resume / stop controls. If a Telugu / Tamil voice isn't installed, install
+  one from macOS System Settings → Accessibility → Spoken Content → System
+  Voice → Manage Voices, or iOS Settings → Accessibility → Spoken Content.
+
+## Speakers
+
+Curated YouTube channels of trusted preachers (currently Bro. John Wesley of
+Calvary Temple in Telugu and Billy Graham / BGEA in English). Web shows the
+channel links in `/speakers`; iOS opens them inside an in-app Safari sheet so
+seniors don't have to switch apps.
 
 ## Doctrinal frame
 
