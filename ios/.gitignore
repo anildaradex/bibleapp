@@ -1,0 +1,39 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.swiftpm/
+Packages/
+Package.resolved
+.build/
+
+# macOS
+.DS_Store
+
+# ML
+ml/gemma-training/data/
+ml/gemma-training/checkpoints/
+ml/gemma-training/.cache/
+*.gguf
+*.safetensors
+
+# Bible text — public-domain translations (KJV/ASV/BBE/WEB) are OK to commit.
+# Licensed translations (NKJV/NIV/ESV/CSB/NASB/NLT/...) must NEVER be committed.
+BibleApp/Resources/bibles/NKJV.*
+BibleApp/Resources/bibles/NIV.*
+BibleApp/Resources/bibles/ESV.*
+BibleApp/Resources/bibles/CSB.*
+BibleApp/Resources/bibles/NASB.*
+BibleApp/Resources/bibles/NLT.*
+BibleApp/Resources/bibles/licensed/
+
+# Secrets
+.env
+.env.*

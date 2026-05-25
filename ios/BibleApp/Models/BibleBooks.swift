@@ -1,0 +1,81 @@
+import Foundation
+
+/// Canonical 66-book table. `id` is the 3-letter Bible-standard code we use
+/// internally and in references. `dataAbbrev` is the (non-standard) key used
+/// by the bundled thiagobodruk JSON files — we translate at load time.
+enum BibleBooks {
+    static let all: [Book] = [
+        // Old Testament
+        Book(id: "GEN", name: "Genesis",         testament: .old, chapterCount: 50),
+        Book(id: "EXO", name: "Exodus",          testament: .old, chapterCount: 40),
+        Book(id: "LEV", name: "Leviticus",       testament: .old, chapterCount: 27),
+        Book(id: "NUM", name: "Numbers",         testament: .old, chapterCount: 36),
+        Book(id: "DEU", name: "Deuteronomy",     testament: .old, chapterCount: 34),
+        Book(id: "JOS", name: "Joshua",          testament: .old, chapterCount: 24),
+        Book(id: "JDG", name: "Judges",          testament: .old, chapterCount: 21),
+        Book(id: "RUT", name: "Ruth",            testament: .old, chapterCount: 4),
+        Book(id: "1SA", name: "1 Samuel",        testament: .old, chapterCount: 31),
+        Book(id: "2SA", name: "2 Samuel",        testament: .old, chapterCount: 24),
+        Book(id: "1KI", name: "1 Kings",         testament: .old, chapterCount: 22),
+        Book(id: "2KI", name: "2 Kings",         testament: .old, chapterCount: 25),
+        Book(id: "1CH", name: "1 Chronicles",    testament: .old, chapterCount: 29),
+        Book(id: "2CH", name: "2 Chronicles",    testament: .old, chapterCount: 36),
+        Book(id: "EZR", name: "Ezra",            testament: .old, chapterCount: 10),
+        Book(id: "NEH", name: "Nehemiah",        testament: .old, chapterCount: 13),
+        Book(id: "EST", name: "Esther",          testament: .old, chapterCount: 10),
+        Book(id: "JOB", name: "Job",             testament: .old, chapterCount: 42),
+        Book(id: "PSA", name: "Psalms",          testament: .old, chapterCount: 150),
+        Book(id: "PRO", name: "Proverbs",        testament: .old, chapterCount: 31),
+        Book(id: "ECC", name: "Ecclesiastes",    testament: .old, chapterCount: 12),
+        Book(id: "SNG", name: "Song of Solomon", testament: .old, chapterCount: 8),
+        Book(id: "ISA", name: "Isaiah",          testament: .old, chapterCount: 66),
+        Book(id: "JER", name: "Jeremiah",        testament: .old, chapterCount: 52),
+        Book(id: "LAM", name: "Lamentations",    testament: .old, chapterCount: 5),
+        Book(id: "EZK", name: "Ezekiel",         testament: .old, chapterCount: 48),
+        Book(id: "DAN", name: "Daniel",          testament: .old, chapterCount: 12),
+        Book(id: "HOS", name: "Hosea",           testament: .old, chapterCount: 14),
+        Book(id: "JOL", name: "Joel",            testament: .old, chapterCount: 3),
+        Book(id: "AMO", name: "Amos",            testament: .old, chapterCount: 9),
+        Book(id: "OBA", name: "Obadiah",         testament: .old, chapterCount: 1),
+        Book(id: "JON", name: "Jonah",           testament: .old, chapterCount: 4),
+        Book(id: "MIC", name: "Micah",           testament: .old, chapterCount: 7),
+        Book(id: "NAM", name: "Nahum",           testament: .old, chapterCount: 3),
+        Book(id: "HAB", name: "Habakkuk",        testament: .old, chapterCount: 3),
+        Book(id: "ZEP", name: "Zephaniah",       testament: .old, chapterCount: 3),
+        Book(id: "HAG", name: "Haggai",          testament: .old, chapterCount: 2),
+        Book(id: "ZEC", name: "Zechariah",       testament: .old, chapterCount: 14),
+        Book(id: "MAL", name: "Malachi",         testament: .old, chapterCount: 4),
+
+        // New Testament
+        Book(id: "MAT", name: "Matthew",         testament: .new, chapterCount: 28),
+        Book(id: "MRK", name: "Mark",            testament: .new, chapterCount: 16),
+        Book(id: "LUK", name: "Luke",            testament: .new, chapterCount: 24),
+        Book(id: "JHN", name: "John",            testament: .new, chapterCount: 21),
+        Book(id: "ACT", name: "Acts",            testament: .new, chapterCount: 28),
+        Book(id: "ROM", name: "Romans",          testament: .new, chapterCount: 16),
+        Book(id: "1CO", name: "1 Corinthians",   testament: .new, chapterCount: 16),
+        Book(id: "2CO", name: "2 Corinthians",   testament: .new, chapterCount: 13),
+        Book(id: "GAL", name: "Galatians",       testament: .new, chapterCount: 6),
+        Book(id: "EPH", name: "Ephesians",       testament: .new, chapterCount: 6),
+        Book(id: "PHP", name: "Philippians",     testament: .new, chapterCount: 4),
+        Book(id: "COL", name: "Colossians",      testament: .new, chapterCount: 4),
+        Book(id: "1TH", name: "1 Thessalonians", testament: .new, chapterCount: 5),
+        Book(id: "2TH", name: "2 Thessalonians", testament: .new, chapterCount: 3),
+        Book(id: "1TI", name: "1 Timothy",       testament: .new, chapterCount: 6),
+        Book(id: "2TI", name: "2 Timothy",       testament: .new, chapterCount: 4),
+        Book(id: "TIT", name: "Titus",           testament: .new, chapterCount: 3),
+        Book(id: "PHM", name: "Philemon",        testament: .new, chapterCount: 1),
+        Book(id: "HEB", name: "Hebrews",         testament: .new, chapterCount: 13),
+        Book(id: "JAS", name: "James",           testament: .new, chapterCount: 5),
+        Book(id: "1PE", name: "1 Peter",         testament: .new, chapterCount: 5),
+        Book(id: "2PE", name: "2 Peter",         testament: .new, chapterCount: 3),
+        Book(id: "1JN", name: "1 John",          testament: .new, chapterCount: 5),
+        Book(id: "2JN", name: "2 John",          testament: .new, chapterCount: 1),
+        Book(id: "3JN", name: "3 John",          testament: .new, chapterCount: 1),
+        Book(id: "JUD", name: "Jude",            testament: .new, chapterCount: 1),
+        Book(id: "REV", name: "Revelation",      testament: .new, chapterCount: 22),
+    ]
+
+    static func book(id: String) -> Book? { all.first { $0.id == id } }
+    static func index(of id: String) -> Int? { all.firstIndex { $0.id == id } }
+}

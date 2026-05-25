@@ -1,0 +1,19 @@
+# Monorepo-level ignores. Each subproject has its own .gitignore too.
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Env files (subproject .env files are also ignored)
+.env
+.env.local
+.env.*.local
+
+# Secrets, never commit
+**/secrets.json
+**/*.pem
+**/*.key
