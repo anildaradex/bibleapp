@@ -51,13 +51,23 @@ To enable ESV: `cp .env.example .env.local`, paste your key from [api.esv.org/ac
 
 ## Translations
 
-| ID  | Name                          | Source              | Status            |
-| --- | ----------------------------- | ------------------- | ----------------- |
-| KJV | King James Version (1611)     | Public domain       | bundled, works offline |
-| BBE | Bible in Basic English (1949) | Public domain       | bundled, works offline |
-| ESV | English Standard Version      | Crossway API        | free key required |
-| NIV | New International Version     | Biblica / Zondervan | needs commercial license — see ios/docs/licensing.md |
-| NKJV| New King James Version        | Thomas Nelson       | needs commercial license — see ios/docs/licensing.md |
+| ID   | Name                            | Source                     | Status                         |
+| ---- | ------------------------------- | -------------------------- | ------------------------------ |
+| KJV  | King James Version (1611)       | Public domain              | bundled, works offline         |
+| BBE  | Bible in Basic English (1949)   | Public domain              | bundled, works offline         |
+| TAM  | Tamil Bible (TOV)               | BSI — public domain in IN  | bundled, works offline         |
+| TEL  | Telugu Bible (TOV)              | BSI — public domain in IN  | bundled, works offline         |
+| ESV  | English Standard Version        | api.esv.org                | free personal-use key required |
+| NIV  | New International Version       | bolls.life API             | online, personal use only      |
+| NKJV | New King James Version          | bolls.life API             | online, personal use only      |
+
+> **NIV / NKJV note:** This app is configured for **personal use**. Both NIV and NKJV are copyrighted; the API path is the user's responsibility. Do not redistribute the app with these enabled.
+
+## Reader options
+
+- Tap any verse to select; ✦ Insight opens the AI passage drawer.
+- Font size: **Normal / Large** toggle in the reader (Aa / Aa) — persisted per device.
+- Translation picker shows all 7 translations; "(setup)" suffix marks ones that need a key.
 
 ## Doctrinal frame
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { search } from "@/lib/bibleService";
+import { listTranslations, search } from "@/lib/bibleService";
 import { parseReference, BOOKS_BY_ID } from "@/lib/books";
 import type { Verse } from "@/lib/types";
 
@@ -17,13 +17,14 @@ export default async function SearchPage({ searchParams }: PageProps) {
   const { q = "", t = "KJV" } = await searchParams;
   const query = q.trim();
   const translation = t.toUpperCase();
+  const translations = listTranslations();
 
   // If the query parses as a reference, send the user straight to the reader.
   const ref = parseReference(query);
   if (ref) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <SearchForm q={q} t={translation} />
+        <SearchForm q={q} t={translation} translations={translations} />
         <div className="mt-6 rounded-lg border border-[var(--border)] p-4">
           <p className="text-sm text-[var(--muted)] mb-2">Looks like a reference:</p>
           <Link
@@ -51,7 +52,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <h1 className="text-2xl font-semibold mb-4">Search Scripture</h1>
-      <SearchForm q={q} t={translation} />
+      <SearchForm q={q} t={translation} translations={translations} />
 
       {error && <p className="mt-6 text-red-600">{error}</p>}
 
@@ -82,7 +83,10 @@ export default async function SearchPage({ searchParams }: PageProps) {
   );
 }
 
-function SearchForm({ q, t }: { q: string; t: string }) {
+function SearchForm({ q, t, translations }: {
+  q: string; t: string;
+  translations: { id: string; available: boolean }[];
+}) {
   return (
     <form action="/search" className="flex gap-2 font-ui">
       <input
@@ -92,9 +96,11 @@ function SearchForm({ q, t }: { q: string; t: string }) {
       />
       <select name="t" defaultValue={t}
               className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-sm">
-        <option value="KJV">KJV</option>
-        <option value="BBE">BBE</option>
-        <option value="ESV">ESV</option>
+        {translations.map(tr => (
+          <option key={tr.id} value={tr.id}>
+            {tr.id}{tr.available ? "" : " (setup)"}
+          </option>
+        ))}
       </select>
       <button type="submit"
               className="rounded-lg bg-[var(--accent)] text-white px-4 py-2.5 text-sm font-medium hover:opacity-90">

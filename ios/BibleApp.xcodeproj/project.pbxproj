@@ -10,6 +10,7 @@
 		0BE216FD5FC5D221069928E2 /* TranslationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEF75768353589F785CE2CF /* TranslationProvider.swift */; };
 		0DEBC35FFB160DA9D769D08D /* bibles in Resources */ = {isa = PBXBuildFile; fileRef = B4843D10843D48E04352C1C7 /* bibles */; };
 		1AA93E5CB8E06B05052A96C2 /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D907B581E37A968694FFBF0 /* Journey.swift */; };
+		246489247A3CF6E61F60B52E /* BollsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C000C8836D09F5AEDEE59F /* BollsProvider.swift */; };
 		68D228AF6632C6607A0C2D84 /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85D20A5D4081CF6BE23C163 /* JourneyView.swift */; };
 		6E2C2D19FDD760B974C74FB9 /* BibleAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9ED095C72460CCABC39010 /* BibleAppApp.swift */; };
 		76DA3AB7617F2F41C00C3033 /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46C159B15E0530074D8D58A /* TrackerService.swift */; };
@@ -43,6 +44,7 @@
 		C196FD5629235A5571A2BABE /* BibleBooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleBooks.swift; sourceTree = "<group>"; };
 		C88513E530E550CF5C56C3B4 /* BundledJSONProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledJSONProvider.swift; sourceTree = "<group>"; };
 		E46C159B15E0530074D8D58A /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
+		F6C000C8836D09F5AEDEE59F /* BollsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BollsProvider.swift; sourceTree = "<group>"; };
 		FAEF75768353589F785CE2CF /* TranslationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				B1B8333D784C01A872A3281B /* BibleService.swift */,
+				F6C000C8836D09F5AEDEE59F /* BollsProvider.swift */,
 				C88513E530E550CF5C56C3B4 /* BundledJSONProvider.swift */,
 				6276E690FAE1602124FDC940 /* ESVProvider.swift */,
 				6D3437D18CC52AE52BF07F93 /* GemmaService.swift */,
@@ -226,6 +229,7 @@
 				6E2C2D19FDD760B974C74FB9 /* BibleAppApp.swift in Sources */,
 				889F9ADA151093B9960FE949 /* BibleBooks.swift in Sources */,
 				C031238D0952EE3D6057AA7E /* BibleService.swift in Sources */,
+				246489247A3CF6E61F60B52E /* BollsProvider.swift in Sources */,
 				A58AB7E323E42786FA7ECE99 /* BundledJSONProvider.swift in Sources */,
 				FE111F82927AF693D0E88D5B /* ContentView.swift in Sources */,
 				891837B237619AD4F7B0DC49 /* ESVProvider.swift in Sources */,

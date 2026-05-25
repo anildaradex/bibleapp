@@ -10,7 +10,7 @@ final class BibleService {
     private let order: [String]
 
     private init() {
-        let bundled: [TranslationProvider] = [
+        let all: [TranslationProvider] = [
             BundledJSONProvider(
                 translation: Translation(id: "KJV",
                                          name: "King James Version",
@@ -22,13 +22,33 @@ final class BibleService {
                                          name: "Bible in Basic English",
                                          publisher: "Public domain (1949)"),
                 resourceName: "BBE"
-            )
+            ),
+            ESVProvider(),
+            BollsProvider(
+                translation: Translation(id: "NIV",
+                                         name: "New International Version",
+                                         publisher: "Biblica / Zondervan (via bolls.life)"),
+                remoteCode: "NIV"
+            ),
+            BollsProvider(
+                translation: Translation(id: "NKJV",
+                                         name: "New King James Version",
+                                         publisher: "Thomas Nelson (via bolls.life)"),
+                remoteCode: "NKJV"
+            ),
+            BundledJSONProvider(
+                translation: Translation(id: "TAM",
+                                         name: "Tamil Bible (TOV)",
+                                         publisher: "Bible Society of India — Tamil Old Version"),
+                resourceName: "TAM"
+            ),
+            BundledJSONProvider(
+                translation: Translation(id: "TEL",
+                                         name: "Telugu Bible (TOV)",
+                                         publisher: "Bible Society of India — Telugu Old Version"),
+                resourceName: "TEL"
+            ),
         ]
-        let api: [TranslationProvider] = [
-            ESVProvider()
-            // Future: APIBibleProvider(...), NIVProvider(...), etc.
-        ]
-        let all = bundled + api
         var dict: [String: TranslationProvider] = [:]
         for p in all { dict[p.translation.id] = p }
         self.providers = dict

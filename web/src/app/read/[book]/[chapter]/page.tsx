@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BOOKS_BY_ID } from "@/lib/books";
-import { chapter as fetchChapter, getProvider } from "@/lib/bibleService";
+import { chapter as fetchChapter, getProvider, listTranslations } from "@/lib/bibleService";
 import { Reader } from "@/components/Reader";
 
 interface PageProps {
@@ -27,6 +27,7 @@ export default async function ReaderPage({ params, searchParams }: PageProps) {
   const translationID = (t ?? "KJV").toUpperCase();
   const bookID = book.toUpperCase();
   const chapterNum = parseInt(chapter, 10);
+  const translations = listTranslations();
 
   // If the provider is unavailable (e.g. ESV with no key), don't even try.
   const provider = getProvider(translationID);
@@ -37,6 +38,7 @@ export default async function ReaderPage({ params, searchParams }: PageProps) {
         bookID={bookID}
         chapter={chapterNum}
         verses={[]}
+        translations={translations}
         unavailable={{
           name: provider.translation.name,
           reason: provider.unavailabilityReason() ?? "Translation is not configured.",
@@ -48,7 +50,9 @@ export default async function ReaderPage({ params, searchParams }: PageProps) {
   try {
     const verses = await fetchChapter(translationID, bookID, chapterNum);
     return (
-      <Reader translationID={translationID} bookID={bookID} chapter={chapterNum} verses={verses} />
+      <Reader
+        translationID={translationID} bookID={bookID} chapter={chapterNum}
+        verses={verses} translations={translations} />
     );
   } catch (err) {
     return (
@@ -57,6 +61,7 @@ export default async function ReaderPage({ params, searchParams }: PageProps) {
         bookID={bookID}
         chapter={chapterNum}
         verses={[]}
+        translations={translations}
         errorMessage={err instanceof Error ? err.message : String(err)}
       />
     );

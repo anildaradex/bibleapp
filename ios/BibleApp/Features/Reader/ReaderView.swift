@@ -7,6 +7,11 @@ struct ReaderView: View {
     @AppStorage("dailyGoalMinutes") private var goalMinutes: Int = 15
     @AppStorage("lastBookID") private var bookID: String = "JHN"
     @AppStorage("lastChapter") private var chapter: Int = 3
+    @AppStorage("readerFontSize") private var fontSizeRaw: String = "normal"
+
+    private var fontSize: ReaderFontSize {
+        ReaderFontSize(rawValue: fontSizeRaw) ?? .normal
+    }
 
     @State private var verses: [Verse] = []
     @State private var selected: Set<Verse> = []
@@ -40,7 +45,8 @@ struct ReaderView: View {
                                     .foregroundStyle(.secondary)
                                     .frame(width: 22, alignment: .trailing)
                                 Text(verse.text)
-                                    .font(.body)
+                                    .font(fontSize.font)
+                                    .lineSpacing(fontSize.lineSpacing)
                             }
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
@@ -74,6 +80,20 @@ struct ReaderView: View {
                 }
                 ToolbarItem(placement: .principal) {
                     Text(translation).font(.caption).foregroundStyle(.secondary)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        ForEach(ReaderFontSize.allCases) { size in
+                            Button {
+                                fontSizeRaw = size.rawValue
+                            } label: {
+                                Label(size.label,
+                                      systemImage: fontSize == size ? "checkmark" : "")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "textformat.size")
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -260,6 +280,32 @@ private struct ChapterGrid: View {
         }
         .navigationTitle(book.name)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+enum ReaderFontSize: String, CaseIterable, Identifiable {
+    case normal, large
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .normal: "Normal"
+        case .large:  "Large"
+        }
+    }
+
+    var font: Font {
+        switch self {
+        case .normal: .body
+        case .large:  .title3
+        }
+    }
+
+    var lineSpacing: CGFloat {
+        switch self {
+        case .normal: 2
+        case .large:  6
+        }
     }
 }
 

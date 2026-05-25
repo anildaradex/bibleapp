@@ -4,33 +4,58 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BOOKS, BOOKS_BY_ID, indexOf } from "@/lib/books";
 import { recordSession } from "@/lib/tracker";
-import type { PassageInsight, PassageReference, Verse } from "@/lib/types";
+import type { PassageInsight, PassageReference, Translation, Verse } from "@/lib/types";
+
+type FontSize = "normal" | "large";
+const FONT_KEY = "bibleapp.fontSize";
+
+interface TranslationOption extends Translation {
+  available: boolean;
+  reason: string | null;
+}
 
 interface Props {
   translationID: string;
   bookID: string;
   chapter: number;
   verses: Verse[];
+  /** All translations (so the picker can show NIV/NKJV/Tamil/Telugu too). */
+  translations: TranslationOption[];
   /** Provider-level unavailability (e.g. ESV with no key). */
   unavailable?: { name: string; reason: string };
   /** Server-side load error to surface, if any. */
   errorMessage?: string;
 }
 
-export function Reader({ translationID, bookID, chapter, verses, unavailable, errorMessage }: Props) {
+export function Reader({
+  translationID, bookID, chapter, verses, translations, unavailable, errorMessage,
+}: Props) {
   const book = BOOKS_BY_ID[bookID];
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [insight, setInsight] = useState<PassageInsight | null>(null);
   const [insightLoading, setInsightLoading] = useState(false);
   const [insightOpen, setInsightOpen] = useState(false);
   const [insightError, setInsightError] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<FontSize>("normal");
+
+  // Hydrate font preference from localStorage (client-only, so guard).
+  useEffect(() => {
+    const stored = typeof window !== "undefined"
+      ? (window.localStorage.getItem(FONT_KEY) as FontSize | null)
+      : null;
+    if (stored === "normal" || stored === "large") setFontSize(stored);
+  }, []);
+
+  function changeFont(next: FontSize) {
+    setFontSize(next);
+    if (typeof window !== "undefined") window.localStorage.setItem(FONT_KEY, next);
+  }
 
   // Track foreground reading time so the Journey meter ticks up when you leave.
   useEffect(() => {
     const start = Date.now();
     return () => {
       const seconds = (Date.now() - start) / 1000;
-      // Only credit substantive reads (>= 5s) to avoid bouncing every nav.
       if (seconds >= 5) recordSession(seconds, verses.length);
     };
   }, [bookID, chapter, verses.length]);
@@ -97,16 +122,23 @@ export function Reader({ translationID, bookID, chapter, verses, unavailable, er
 
   if (!book) return <p className="p-8">Unknown book: {bookID}</p>;
 
+  const verseTextClass = fontSize === "large" ? "text-2xl" : "text-lg";
+  const verseLineClass = fontSize === "large" ? "leading-loose" : "leading-relaxed";
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <ReaderHeader translationID={translationID} bookID={bookID} chapter={chapter} />
+      <ReaderHeader
+        translationID={translationID} bookID={bookID} chapter={chapter}
+        translations={translations}
+        fontSize={fontSize} onChangeFont={changeFont}
+      />
 
       {unavailable ? (
         <UnavailableCard name={unavailable.name} reason={unavailable.reason} />
       ) : errorMessage ? (
         <p className="text-red-600 my-4">{errorMessage}</p>
       ) : (
-        <article className="space-y-2 leading-relaxed text-lg">
+        <article className={`space-y-2 ${verseLineClass} ${verseTextClass}`}>
           {verses.map(v => {
             const on = selected.has(v.verse);
             return (
@@ -154,10 +186,17 @@ export function Reader({ translationID, bookID, chapter, verses, unavailable, er
   );
 }
 
-function ReaderHeader({ translationID, bookID, chapter }: { translationID: string; bookID: string; chapter: number }) {
+function ReaderHeader({
+  translationID, bookID, chapter, translations, fontSize, onChangeFont,
+}: {
+  translationID: string; bookID: string; chapter: number;
+  translations: TranslationOption[];
+  fontSize: FontSize;
+  onChangeFont: (s: FontSize) => void;
+}) {
   const book = BOOKS_BY_ID[bookID];
   return (
-    <header className="flex items-center justify-between mb-6">
+    <header className="flex items-start justify-between mb-6 gap-3 flex-wrap">
       <div>
         <Link href="/read/picker"
               className="font-ui text-sm text-[var(--muted)] hover:text-[var(--accent)]">
@@ -167,20 +206,48 @@ function ReaderHeader({ translationID, bookID, chapter }: { translationID: strin
           {book?.name} {chapter}
         </h1>
       </div>
-      <TranslationPicker current={translationID} bookID={bookID} chapter={chapter} />
+      <div className="flex items-center gap-2">
+        <FontSizeToggle current={fontSize} onChange={onChangeFont} />
+        <TranslationPicker current={translationID} bookID={bookID} chapter={chapter}
+                           translations={translations} />
+      </div>
     </header>
   );
 }
 
-function TranslationPicker({ current, bookID, chapter }: { current: string; bookID: string; chapter: number }) {
+function FontSizeToggle({ current, onChange }: { current: FontSize; onChange: (s: FontSize) => void }) {
+  return (
+    <div className="font-ui text-sm flex border border-[var(--border)] rounded overflow-hidden">
+      <button type="button" onClick={() => onChange("normal")}
+              className={`px-2 py-1 ${current === "normal" ? "bg-[var(--accent)] text-white" : "hover:bg-[var(--surface)]"}`}
+              title="Normal text size" aria-pressed={current === "normal"}>
+        <span className="text-xs">Aa</span>
+      </button>
+      <button type="button" onClick={() => onChange("large")}
+              className={`px-2 py-1 ${current === "large" ? "bg-[var(--accent)] text-white" : "hover:bg-[var(--surface)]"}`}
+              title="Large text size" aria-pressed={current === "large"}>
+        <span className="text-base">Aa</span>
+      </button>
+    </div>
+  );
+}
+
+function TranslationPicker({
+  current, bookID, chapter, translations,
+}: {
+  current: string; bookID: string; chapter: number;
+  translations: TranslationOption[];
+}) {
   return (
     <form action={`/read/${bookID}/${chapter}`} className="font-ui text-sm">
       <select name="t" defaultValue={current}
               onChange={e => { e.currentTarget.form?.requestSubmit(); }}
               className="bg-transparent border border-[var(--border)] rounded px-2 py-1">
-        <option value="KJV">KJV</option>
-        <option value="BBE">BBE</option>
-        <option value="ESV">ESV</option>
+        {translations.map(t => (
+          <option key={t.id} value={t.id}>
+            {t.id}{t.available ? "" : " (setup)"}
+          </option>
+        ))}
       </select>
     </form>
   );

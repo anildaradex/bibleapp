@@ -22,6 +22,7 @@ struct SettingsView: View {
     @AppStorage("dailyGoalMinutes") private var dailyGoalMinutes: Int = 15
     @AppStorage("preferredTranslation") private var translation: String = "KJV"
     @AppStorage("esvAPIKey") private var esvKey: String = ""
+    @AppStorage("readerFontSize") private var fontSizeRaw: String = "normal"
     @State private var showingKeyEditor = false
 
     var body: some View {
@@ -37,6 +38,11 @@ struct SettingsView: View {
                     }
                     Stepper("Daily goal: \(dailyGoalMinutes) min",
                             value: $dailyGoalMinutes, in: 5...120, step: 5)
+                    Picker("Text size", selection: $fontSizeRaw) {
+                        ForEach(ReaderFontSize.allCases) { size in
+                            Text(size.label).tag(size.rawValue)
+                        }
+                    }
                 }
 
                 Section("Translations") {

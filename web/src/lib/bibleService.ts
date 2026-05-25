@@ -1,6 +1,7 @@
 import "server-only";
 import { BundledJSONProvider } from "./providers/bundled";
 import { ESVProvider } from "./providers/esv";
+import { BollsProvider } from "./providers/bolls";
 import type { TranslationProvider } from "./providers/types";
 import type { Translation, Verse } from "./types";
 
@@ -14,6 +15,22 @@ const PROVIDERS: TranslationProvider[] = [
     "BBE"
   ),
   new ESVProvider(),
+  new BollsProvider(
+    { id: "NIV", name: "New International Version", publisher: "Biblica / Zondervan (via bolls.life)" },
+    "NIV"
+  ),
+  new BollsProvider(
+    { id: "NKJV", name: "New King James Version", publisher: "Thomas Nelson (via bolls.life)" },
+    "NKJV"
+  ),
+  new BundledJSONProvider(
+    { id: "TAM", name: "Tamil Bible (TOV)", publisher: "Bible Society of India — Tamil Old Version" },
+    "TAM"
+  ),
+  new BundledJSONProvider(
+    { id: "TEL", name: "Telugu Bible (TOV)", publisher: "Bible Society of India — Telugu Old Version" },
+    "TEL"
+  ),
 ];
 
 const BY_ID: Record<string, TranslationProvider> =
