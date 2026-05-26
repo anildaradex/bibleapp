@@ -77,6 +77,14 @@ struct InsightSheet: View {
                     Label("Listen to notes", systemImage: "play.circle.fill")
                 }
                 .buttonStyle(.borderedProminent)
+            case .loading:
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Preparing voice…").foregroundStyle(.secondary)
+                    Button { voice.stop() } label: {
+                        Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
+                    }
+                }
             case .speaking:
                 Button { voice.pause() } label: {
                     Label("Pause", systemImage: "pause.circle.fill")

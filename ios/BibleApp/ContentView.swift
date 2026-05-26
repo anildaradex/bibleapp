@@ -25,8 +25,10 @@ struct SettingsView: View {
     @AppStorage("dailyGoalMinutes") private var dailyGoalMinutes: Int = 15
     @AppStorage("preferredTranslation") private var translation: String = "KJV"
     @AppStorage("esvAPIKey") private var esvKey: String = ""
+    @AppStorage("googleTTSAPIKey") private var googleTTSKey: String = ""
     @AppStorage("readerFontSize") private var fontSizeRaw: String = "normal"
     @State private var showingKeyEditor = false
+    @State private var showingTTSEditor = false
 
     var body: some View {
         NavigationStack {
@@ -87,6 +89,36 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Voice (Listen buttons)") {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("High-quality voice").font(.subheadline)
+                            Text(googleTTSKey.isEmpty
+                                 ? "Using system voices. Add a Google Cloud TTS key for natural Telugu / Tamil / English voices."
+                                 : "Using Google Cloud TTS (Chirp3-HD).")
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: googleTTSKey.isEmpty
+                              ? "exclamationmark.circle.fill" : "checkmark.circle.fill")
+                            .foregroundStyle(googleTTSKey.isEmpty ? .orange : .green)
+                    }
+                    Button {
+                        showingTTSEditor = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "key.fill")
+                            Text(googleTTSKey.isEmpty
+                                 ? "Add Google TTS API key"
+                                 : "Update Google TTS API key")
+                        }
+                    }
+                    if !googleTTSKey.isEmpty {
+                        Text("Key on file: \(maskedKey(googleTTSKey))")
+                            .font(.caption2).foregroundStyle(.secondary)
+                    }
+                }
+
                 Section("About") {
                     Text("Built on Biblical principles. AI summaries are study aids, not Scripture.")
                         .font(.footnote).foregroundStyle(.secondary)
@@ -95,6 +127,9 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .sheet(isPresented: $showingKeyEditor) {
                 ESVKeyEditor(key: $esvKey)
+            }
+            .sheet(isPresented: $showingTTSEditor) {
+                GoogleTTSKeyEditor(key: $googleTTSKey)
             }
         }
     }
@@ -139,6 +174,63 @@ private struct ESVKeyEditor: View {
                 }
             }
             .navigationTitle("ESV API key")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        key = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+                        dismiss()
+                    }
+                    .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+            }
+            .onAppear { draft = key }
+        }
+    }
+}
+
+private struct GoogleTTSKeyEditor: View {
+    @Binding var key: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var draft: String = ""
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    SecureField("Paste Google Cloud TTS API key", text: $draft)
+                        .textContentType(.password)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                } header: {
+                    Text("Google Cloud Text-to-Speech")
+                } footer: {
+                    Text("Replaces the mechanical system voices with Google's natural Chirp3-HD voices. Free tier covers 1M characters/month — plenty for personal Bible reading. The key is stored on this device only.")
+                }
+                Section("Setup (one-time)") {
+                    Text("1. Open console.cloud.google.com and create a project (if you don't have one).")
+                    Text("2. Enable \"Cloud Text-to-Speech API\".")
+                    Text("3. APIs & Services → Credentials → Create credentials → API key.")
+                    Text("4. Copy the key and paste it above.")
+                }
+                if let url = URL(string: "https://console.cloud.google.com/apis/credentials") {
+                    Link(destination: url) {
+                        Label("Open Google Cloud Credentials", systemImage: "arrow.up.right.square")
+                    }
+                }
+                if !key.isEmpty {
+                    Button(role: .destructive) {
+                        key = ""
+                        dismiss()
+                    } label: {
+                        Label("Remove key from this device", systemImage: "trash")
+                    }
+                }
+            }
+            .navigationTitle("Google TTS")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

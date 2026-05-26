@@ -14,6 +14,7 @@
 		26362CF114471E7A50FA5302 /* VoiceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08D9DCF943E212F544B44FD /* VoiceService.swift */; };
 		68D228AF6632C6607A0C2D84 /* JourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85D20A5D4081CF6BE23C163 /* JourneyView.swift */; };
 		6E2C2D19FDD760B974C74FB9 /* BibleAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9ED095C72460CCABC39010 /* BibleAppApp.swift */; };
+		70CA6FC285D01B335831C4FB /* GoogleTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92718DDDEC0583B6B7E81F52 /* GoogleTTSService.swift */; };
 		76DA3AB7617F2F41C00C3033 /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46C159B15E0530074D8D58A /* TrackerService.swift */; };
 		7908A076A1D1E897DD10484A /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C17E6E3E803EAE414A3941 /* ReaderView.swift */; };
 		889F9ADA151093B9960FE949 /* BibleBooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C196FD5629235A5571A2BABE /* BibleBooks.swift */; };
@@ -39,6 +40,7 @@
 		64DC2FDCED7E60B0C1C8F3B6 /* Bible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bible.swift; sourceTree = "<group>"; };
 		6D3437D18CC52AE52BF07F93 /* GemmaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GemmaService.swift; sourceTree = "<group>"; };
 		7DB48143C9DCCE20B59EE762 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		92718DDDEC0583B6B7E81F52 /* GoogleTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleTTSService.swift; sourceTree = "<group>"; };
 		A85D20A5D4081CF6BE23C163 /* JourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyView.swift; sourceTree = "<group>"; };
 		B1B8333D784C01A872A3281B /* BibleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleService.swift; sourceTree = "<group>"; };
 		B4843D10843D48E04352C1C7 /* bibles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bibles; path = BibleApp/Resources/bibles; sourceTree = SOURCE_ROOT; };
@@ -75,6 +77,7 @@
 				C88513E530E550CF5C56C3B4 /* BundledJSONProvider.swift */,
 				6276E690FAE1602124FDC940 /* ESVProvider.swift */,
 				6D3437D18CC52AE52BF07F93 /* GemmaService.swift */,
+				92718DDDEC0583B6B7E81F52 /* GoogleTTSService.swift */,
 				E46C159B15E0530074D8D58A /* TrackerService.swift */,
 				FAEF75768353589F785CE2CF /* TranslationProvider.swift */,
 				F08D9DCF943E212F544B44FD /* VoiceService.swift */,
@@ -248,6 +251,7 @@
 				FE111F82927AF693D0E88D5B /* ContentView.swift in Sources */,
 				891837B237619AD4F7B0DC49 /* ESVProvider.swift in Sources */,
 				A99311E2420DF6EF5F1E32E8 /* GemmaService.swift in Sources */,
+				70CA6FC285D01B335831C4FB /* GoogleTTSService.swift in Sources */,
 				BC9063E0726682CDC84D8D0B /* InsightSheet.swift in Sources */,
 				1AA93E5CB8E06B05052A96C2 /* Journey.swift in Sources */,
 				68D228AF6632C6607A0C2D84 /* JourneyView.swift in Sources */,

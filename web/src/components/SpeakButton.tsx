@@ -1,60 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { speak, stop, pause, resume, whenVoicesReady, type SpeechStatus } from "@/lib/speech";
+import { useEffect, useRef, useState } from "react";
+import { SpeechController, whenVoicesReady, type SpeechStatus } from "@/lib/speech";
 
 interface Props {
-  /** What to read aloud. Build it once per click. */
+  /** Build the text to read once per click. */
   getText: () => string;
   lang: string;
-  /** Tailwind class overrides if you want a different size */
   className?: string;
   label?: string;
 }
 
 /**
- * Big, senior-friendly play/pause/stop button. Shows clear status text
- * and stops automatically when the user navigates away (cleanup on unmount).
+ * Big, senior-friendly play / pause / resume / stop button.
+ *
+ * - Uses Google Cloud TTS when configured server-side (much better
+ *   Telugu / Tamil voices), with a "Preparing voice…" indicator while
+ *   the first chunk is fetched.
+ * - Falls back to the browser's Web Speech API otherwise.
+ * - Stops automatically when the component unmounts (drawer close, nav).
  */
 export function SpeakButton({ getText, lang, className = "", label = "Listen" }: Props) {
+  const controllerRef = useRef<SpeechController | null>(null);
   const [status, setStatus] = useState<SpeechStatus>("idle");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     whenVoicesReady();
-    return () => stop(); // stop speech when component unmounts (nav, drawer close)
+    controllerRef.current = new SpeechController();
+    return () => controllerRef.current?.cancel();
   }, []);
 
   function onPlay() {
     const text = getText().trim();
     if (!text) return;
-    setStatus("speaking");
-    speak({
+    setError(null);
+    controllerRef.current?.play({
       text, lang,
-      onEnd: () => setStatus("idle"),
-      onError: () => setStatus("idle"),
+      onStatus: setStatus,
+      onError: (msg) => setError(msg),
     });
   }
-
-  function onPause() {
-    pause();
-    setStatus("paused");
-  }
-  function onResume() {
-    resume();
-    setStatus("speaking");
-  }
-  function onStop() {
-    stop();
-    setStatus("idle");
-  }
+  function onPause()  { controllerRef.current?.pause(); }
+  function onResume() { controllerRef.current?.resume(); }
+  function onStop()   { controllerRef.current?.cancel(); }
 
   return (
-    <div className={`font-ui inline-flex items-center gap-2 ${className}`}>
-      {status === "idle" && (
+    <div className={`font-ui inline-flex items-center gap-2 flex-wrap ${className}`}>
+      {(status === "idle") && (
         <button onClick={onPlay} aria-label={`${label}: play`}
                 className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] text-white px-4 py-2 hover:opacity-90">
           <span aria-hidden>▶</span><span>{label}</span>
         </button>
+      )}
+      {status === "loading" && (
+        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[var(--muted)]"
+              aria-live="polite">
+          <span className="inline-block h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
+          Preparing voice…
+          <button onClick={onStop} aria-label="Cancel"
+                  className="ml-1 text-[var(--muted)] hover:text-[var(--accent)]">✕</button>
+        </span>
       )}
       {status === "speaking" && (
         <>
@@ -81,6 +87,9 @@ export function SpeakButton({ getText, lang, className = "", label = "Listen" }:
             <span aria-hidden>■</span>
           </button>
         </>
+      )}
+      {error && (
+        <span className="text-xs text-red-600 max-w-xs">{error}</span>
       )}
     </div>
   );
